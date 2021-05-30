@@ -18,7 +18,7 @@ class CustomerListView(APIView):
         :param format: Format of the customer records to return to
         :return: Returns a list of customer records
         """
-        customers = User.objects.all()
+        customers = User.objects.filter(is_customer=True)
         serializer = UserSerializer(customers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -46,6 +46,8 @@ class CustomerDetailView(APIView):
         """
         try:
             customer = User.objects.get(id=id)
+            if not(customer.is_customer):
+                raise Exception
         except:
             error = {'error': 'Customer with given id not found'}
             return Response(error, status=status.HTTP_404_NOT_FOUND)
