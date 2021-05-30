@@ -4,16 +4,18 @@ from allauth.account.adapter import get_adapter
 from django.contrib.auth import authenticate
 from .models import User
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','email','username','password','is_customer','is_guard','is_online')
+        fields = ('id', 'email', 'username', 'password',
+                  'is_customer', 'is_guard', 'is_online')
 
 
 class CustomRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email','username','password','is_customer','is_guard')
+        fields = ('email', 'username', 'password', 'is_customer', 'is_guard')
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_cleaned_data(self):
@@ -23,16 +25,16 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
             'password': self.validated_data.get('password', ''),
             'is_customer': self.validated_data.get('is_customer', ''),
             'is_guard': self.validated_data.get('is_guard', ''),
-            
+
         }
 
     def create(self, validated_data):
         username = validated_data.pop('username')
         email = validated_data.pop('email')
         password = validated_data.pop('password')
-        user = User.objects.create_user(username, email, password, **validated_data)
+        user = User.objects.create_user(
+            username, email, password, **validated_data)
         return user
-
 
     def save(self, request):
         adapter = get_adapter()
@@ -46,6 +48,7 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         adapter.save_user(request, user, self)
         return user
 
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
@@ -55,7 +58,3 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
-
-
-
-        

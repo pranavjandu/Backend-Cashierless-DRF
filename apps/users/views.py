@@ -6,10 +6,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+
 class CustomerListView(APIView):
     """
     A class based view for creating and fetching customer records
     """
+
     def get(self, format=None):
         """
         Get all the customer records
@@ -34,6 +36,7 @@ class CustomerListView(APIView):
         return Response(serializer.error_messages,
                         status=status.HTTP_400_BAD_REQUEST)
 
+
 class CustomerDetailView(APIView):
     def get(self, request, id, format=None):
         """
@@ -44,7 +47,7 @@ class CustomerDetailView(APIView):
         try:
             customer = User.objects.get(id=id)
         except:
-            error = {'error':'Customer with given id not found'}
+            error = {'error': 'Customer with given id not found'}
             return Response(error, status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(customer)
         return Response(serializer.data, status=status.HTTP_200_OK)
