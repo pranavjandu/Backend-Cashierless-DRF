@@ -8,6 +8,6 @@ admin.autodiscover()
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    path('api/',views.CustomerListView.as_view(),name='customer_list'),
-    path('api/<int:id>/',views.CustomerDetailView.as_view(),name='customer_detail')
+    path('api/', views.CustomerListView.as_view(), name='customer_list'),
+    path('api/<int:id>/', views.CustomerDetailView.as_view(), name='customer_detail')
 ]
